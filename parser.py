@@ -4,40 +4,33 @@ As a battle bot, most messages can be ignored. Of particular interest
 are messages pertaining to starting battles and logins.
 """
 
-import json, re
-from itertools import groupby
+import json
 
-def updateuser(list_of_strings):
-    # |updateuser|USER|NAMED|AVATAR|SETTINGS
-    # USER : string, NAMED : int, AVATAR : int, SETTINGS : json
+def updateuser(tokens):
+    #|updateuser|USER|NAMED|AVATAR|SETTINGS
     return {
-        "TYPE"     : list_of_strings[0],
-        "USER"     : list_of_strings[1],
-        "NAMED"    : int(list_of_strings[2]),
-        "AVATAR"   : int(list_of_strings[3]),
-        "SETTINGS" : json.loads(list_of_strings[4])
+        "TYPE"     : tokens[0],
+        "USER"     : tokens[1],
+        "NAMED"    : int(tokens[2]),
+        "AVATAR"   : int(tokens[3]),
+        "SETTINGS" : json.loads(tokens[4])
     }
 
 
-def challstr(list_of_strings):
+def challstr(tokens):
     #|challstr|CHALLSTR
-    #nb: CHALLSTR contains '|' characters
+    #note: CHALLSTR contains '|' characters
+    challstr = ""
+    for token in tokens[1:]:
+        challstr += token + "|"
     return {
-        "TYPE" : list_of_strings[0],
-        "CHALLSTR" : "".join(intersperse(list_of_strings[1:]))
+        "TYPE" : tokens[0],
+        "CHALLSTR" : challstr
     }
 
-def formats(list_of_strings):
-    print([list(g) for k, g in groupby(list_of_strings[1:], lambda item: re.fullmatch(',\d', item))])
-
+def formats(tokens):
+    #|formats|
     return {
-        "TYPE" : list_of_strings[0],
-        "FORMATSLIST" : list_of_strings[1:]
+        "TYPE" : tokens[0],
+        "FORMATSLIST" : tokens[1:]
     }
-
-def intersperse(iterable, delimiter = '|'):
-    it = iter(iterable)
-    yield next(it)
-    for x in it:
-        yield delimiter
-        yield x

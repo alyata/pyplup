@@ -27,13 +27,13 @@ class Showdown:
             print(parsed_message)
 
     def parse(self, message):
-        split_message = message.split('|')
-        #"|messageTag|..." will always have an empty string as first element
-        # after split by '|'
-        split_message.remove('')
-        #Switch-Case on the first word in the list
+        tokens = message.split('|')
+        #remove empty first token
+        tokens = tokens[1:]
+
+        opcode = tokens[0]
         return {
             "updateuser" : parser.updateuser,
             "formats" : parser.formats,
             "challstr" : parser.challstr
-        }[split_message[0]](split_message)
+        }[opcode](tokens)
