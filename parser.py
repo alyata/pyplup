@@ -6,7 +6,7 @@ are messages pertaining to starting battles and logins.
 
 import json
 
-def updateuser(tokens):
+def updateuser(tokens: [str]) -> dict:
     #|updateuser|USER|NAMED|AVATAR|SETTINGS
     return {
         "TYPE"     : tokens[0],
@@ -17,9 +17,10 @@ def updateuser(tokens):
     }
 
 
-def challstr(tokens):
+def challstr(tokens: [str]) -> dict:
     #|challstr|CHALLSTR
-    #note: CHALLSTR contains '|' characters
+    #CHALLSTR contains '|' characters
+    #so it might have been tokenized wrongly
     challstr = ""
     for token in tokens[1:]:
         challstr += token + "|"
@@ -28,9 +29,21 @@ def challstr(tokens):
         "CHALLSTR" : challstr
     }
 
-def formats(tokens):
-    #|formats|
+def formats(tokens: [str]) -> dict:
+    #|formats|FORMATSLIST
+    #group formats by section headers
+    format_sections = {}
+    new_section = False
+    for token in tokens[1:]:
+        if new_section:
+            current_section = token
+            format_sections[current_section] = []
+            new_section = False
+        elif token[0] == ',':
+            new_section = True
+        else:
+            format_sections[current_section].append(token)
     return {
         "TYPE" : tokens[0],
-        "FORMATSLIST" : tokens[1:]
+        "FORMATSLIST" : format_sections
     }
