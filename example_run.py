@@ -1,9 +1,11 @@
-from showdown import Showdown
+from lib.showdown import Showdown
 import asyncio
 import time
 
+import example_config as config
+
 async def main():
-    show = Showdown('kapzlok2408', password = 'chandra2408')
+    show = Showdown(config.username, config.password)
     await show.connect()
     task = asyncio.create_task(show.run())
 

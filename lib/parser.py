@@ -31,7 +31,8 @@ def parse(message: str) -> dict:
         "updatesearch" : updatesearch,
         "updatechallenges" : updatechallenges,
         "queryresponse" : queryresponse
-    }[type]
+    }.get(type,
+        lambda t: print(f"The message type {type} is not recognized"))
     return parse_func(tokens)
 
 """
@@ -120,7 +121,7 @@ def challstr(tokens: [str]) -> dict:
 #|updateuser|USER|NAMED|AVATAR|SETTINGS
 def updateuser(tokens: [str]) -> dict:
     return {
-        "TYPE"     : "upadateuser",
+        "TYPE"     : "updateuser",
         "USER"     : tokens[1],
         "NAMED"    : int(tokens[2]),
         "AVATAR"   : int(tokens[3]),

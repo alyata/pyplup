@@ -1,7 +1,8 @@
 import websockets
 import json
+import asyncio
 from requests import post
-from parser import parse
+from .parser import parse
 
 class Showdown:
     def __init__(self, username = '', password = ''):
@@ -15,26 +16,14 @@ class Showdown:
             for message in messages.split('\n'):
                 await self.process(message)
 
+    from ._showdown_process import process_challstr
+
     async def process(self, message):
         params = parse(message)
-        if (params["TYPE"] == "challstr"):
-            post_body = {
-                "act" : "login",
-                "name" : self.username,
-                "pass" : self.password,
-                "challstr" : params["CHALLSTR"]
-            }
-            res = post("http://play.pokemonshowdown.com/action.php", post_body)
-            #ignore the leading '['
-            response = json.loads(res.text[1:])
-            print(response)
-            if (response["actionsuccess"]):
-                await self.connection.send(f"/trn {self.username},0,{response['assertion']}")
-                print(f"login succesful. USERNAME = {self.username}")
-            else:
-                print("login failed. Continuing as guest...")
-        else:
-            print(params)
+        process_func = {
+            "challstr": self.process_challstr,
+        }.get(params["TYPE"], asyncio.coroutine(print))
+        await process_func(params)
 
     # opens a connection
     async def connect(self):
