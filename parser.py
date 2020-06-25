@@ -6,6 +6,31 @@ are messages pertaining to starting battles and logins.
 
 import json
 
+def parse(tokens: [str]) -> dict:
+    type = tokens[0]
+    parse_func = {
+        "init" : init,
+        "title" : title,
+        "users" : users,
+        "join" : join,
+        "j" : join,
+        "J" : join,
+        "leave" : leave,
+        "l" : leave,
+        "L" : leave,
+        "battle" : battle,
+        "b" : battle,
+        "usercount" : usercount,
+        "nametaken" : nametaken,
+        "challstr" : challstr,
+        "updateuser" : updateuser,
+        "formats" : formats,
+        "updatesearch" : updatesearch,
+        "updatechallenges" : updatechallenges,
+        "queryresponse" : queryresponse
+    }[type]
+    return parse_func(tokens)
+
 """
 Room initialization
 """
@@ -13,21 +38,21 @@ Room initialization
 #|init|ROOMTYPE
 def init(tokens: [str]) -> dict:
     return {
-        "TYPE" : tokens[0],
+        "TYPE" : "init",
         "ROOMTYPE" : tokens[1]
     }
 
 #|title|TITLE
 def title(tokens: [str]) -> dict:
     return {
-        "TYPE" : tokens[0],
+        "TYPE" : "title",
         "TITLE" : tokens[1]
     }
 
 #|users|USERLIST
 def users(tokens: [str]) -> dict:
     return {
-        "TYPE" : tokens[0],
+        "TYPE" : "users",
         "TITLE" : json.loads(tokens[1])
     }
 
@@ -64,14 +89,14 @@ Global messages
 #|usercount|USERCOUNT
 def usercount(tokens: [str]) -> dict:
     return {
-        "TYPE" : tokens[0],
+        "TYPE" : "usercount",
         "USERCOUNT" : int(tokens[1])
     }
 
 #|nametaken|USERNAME|MESSAGE
 def nametaken(tokens: [str]) -> dict:
     return {
-        "TYPE" : tokens[0],
+        "TYPE" : "nametaken",
         "USERNAME" : tokens[1],
         "MESSAGE" : tokens[2]
     }
@@ -84,14 +109,14 @@ def challstr(tokens: [str]) -> dict:
     for token in tokens[1:]:
         challstr += token + "|"
     return {
-        "TYPE" : tokens[0],
+        "TYPE" : "challstr",
         "CHALLSTR" : challstr
     }
 
 #|updateuser|USER|NAMED|AVATAR|SETTINGS
 def updateuser(tokens: [str]) -> dict:
     return {
-        "TYPE"     : tokens[0],
+        "TYPE"     : "upadateuser",
         "USER"     : tokens[1],
         "NAMED"    : int(tokens[2]),
         "AVATAR"   : int(tokens[3]),
@@ -113,28 +138,28 @@ def formats(tokens: [str]) -> dict:
         else:
             format_sections[current_section].append(token)
     return {
-        "TYPE" : tokens[0],
+        "TYPE" : "formats",
         "FORMATSLIST" : format_sections
     }
 
 #|updatesearch|JSON
 def updatesearch(tokens: [str]) -> dict:
     return {
-        "TYPE" : tokens[0],
+        "TYPE" : "updatesearch",
         "JSON" : json.loads(tokens[1])
     }
 
 #|updatechallenges|JSON
 def updatechallenges(tokens: [str]) -> dict:
     return {
-        "TYPE" : tokens[0],
+        "TYPE" : "updatechallenges",
         "JSON" : json.loads(tokens[1])
     }
 
 #|queryresponse|QUERYTYPE|JSON
 def queryresponse(tokens: [str]) -> dict:
     return {
-        "TYPE" : tokens[0],
+        "TYPE" : "queryresponse",
         "QUERYTYPE" : tokens[1],
         "JSON" : json.loads(tokens[2])
     }

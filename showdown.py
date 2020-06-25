@@ -1,5 +1,5 @@
 import websockets
-import parser
+from parser import parse
 
 class Showdown:
     def __init__(self, username, password = None):
@@ -30,10 +30,4 @@ class Showdown:
         tokens = message.split('|')
         #remove empty first token
         tokens = tokens[1:]
-
-        opcode = tokens[0]
-        return {
-            "updateuser" : parser.updateuser,
-            "formats" : parser.formats,
-            "challstr" : parser.challstr
-        }[opcode](tokens)
+        return parse(tokens)
