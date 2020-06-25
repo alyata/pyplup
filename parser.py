@@ -6,7 +6,10 @@ are messages pertaining to starting battles and logins.
 
 import json
 
-def parse(tokens: [str]) -> dict:
+def parse(message: str) -> dict:
+    tokens = message.split('|')
+    #remove empty first token
+    tokens = tokens[1:]
     type = tokens[0]
     parse_func = {
         "init" : init,
@@ -106,8 +109,9 @@ def challstr(tokens: [str]) -> dict:
     #CHALLSTR contains '|' characters
     #so it might have been tokenized wrongly
     challstr = ""
-    for token in tokens[1:]:
+    for token in tokens[1:-1]:
         challstr += token + "|"
+    challstr += tokens[-1]
     return {
         "TYPE" : "challstr",
         "CHALLSTR" : challstr
