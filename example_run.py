@@ -1,4 +1,4 @@
-from lib.showdown import Showdown
+from src.showdown import Showdown
 import asyncio
 import time
 
