@@ -1,10 +1,10 @@
+import json
+
 """
 A collection of parsing functions to parse Server-to-Client messages.
 As a battle bot, user messages can be ignored. Of particular interest
 are messages pertaining to starting battles and logins.
 """
-
-import json
 
 def parse(message: str) -> dict:
     tokens = message.split('|')

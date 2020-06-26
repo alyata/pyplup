@@ -1,8 +1,4 @@
 import websockets
-import json
-import asyncio
-from requests import post
-from .parser import parse
 
 class Showdown:
     def __init__(self, username = '', password = ''):
@@ -16,14 +12,7 @@ class Showdown:
             for message in messages.split('\n'):
                 await self.process(message)
 
-    from ._showdown_process import process_challstr
-
-    async def process(self, message):
-        params = parse(message)
-        process_func = {
-            "challstr": self.process_challstr,
-        }.get(params["TYPE"], asyncio.coroutine(print))
-        await process_func(params)
+    from ._showdown_process import process
 
     # opens a connection
     async def connect(self):
