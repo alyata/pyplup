@@ -9,10 +9,9 @@ class Showdown:
 
     async def run(self):
         async for messages in self.connection:
-            for message in messages.split('\n'):
-                await self.process(message)
+            await self.process_messages(messages)
 
-    from ._showdown_process import process
+    from ._showdown_process import process_messages
 
     # opens a connection
     async def connect(self):

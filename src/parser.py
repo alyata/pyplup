@@ -6,7 +6,7 @@ As a battle bot, user messages can be ignored. Of particular interest
 are messages pertaining to starting battles and logins.
 """
 
-def parse(message: str) -> dict:
+def parse(roomid: str, message: str) -> dict:
     tokens = message.split('|')
     #remove empty first token
     tokens = tokens[1:]
@@ -31,9 +31,15 @@ def parse(message: str) -> dict:
         "updatesearch" : updatesearch,
         "updatechallenges" : updatechallenges,
         "queryresponse" : queryresponse
-    }.get(type,
-        lambda t: print(f"The message type {type} is not recognized"))
-    return parse_func(tokens)
+    }.get(type, unrecognized)
+    parsed = parse_func(tokens)
+    parsed["ROOMID"] = roomid
+    return parsed
+
+def unrecognized(tokens: [str]) -> dict:
+    return {
+        "TYPE" : "unrecognized",
+    }
 
 """
 Room initialization
@@ -67,14 +73,14 @@ Room messages
 def join(tokens: [str]) -> dict:
     return {
         "TYPE" : "join",
-        "TITLE" : tokens[1]
+        "USER" : tokens[1]
     }
 
 #|leave|USER or |l|USER or |L|USER
 def leave(tokens: [str]) -> dict:
     return {
         "TYPE" : "leave",
-        "TITLE" : tokens[1]
+        "USER" : tokens[1]
     }
 
 #|battle|ROOMID|USER1|USER2 or |b|ROOMID|USER1|USER2
