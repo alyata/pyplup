@@ -1,8 +1,9 @@
 import websockets
+from .constants import WEBSOCKET_URL
 
 class Showdown:
     def __init__(self, username = '', password = ''):
-        self.uri = "ws://sim.smogon.com:8000/showdown/websocket"
+        self.url = WEBSOCKET_URL
         self.username = username
         self.password = password
         self.open = False
@@ -15,7 +16,7 @@ class Showdown:
 
     # opens a connection
     async def connect(self):
-        self.connection = await websockets.connect(self.uri)
+        self.connection = await websockets.connect(self.url)
         self.open = True
 
     # closes an existing connection

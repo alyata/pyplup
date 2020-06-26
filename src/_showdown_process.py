@@ -2,6 +2,7 @@ import json
 from requests import post
 import asyncio
 from .parser import parse
+from .constants import LOGIN_URL
 
 """
 methods to process incoming messages and respond to them.
@@ -28,10 +29,13 @@ async def process(self, roomid, message):
     process_func = {
         "challstr": process_challstr,
         "updatechallenges": process_updatechallenges,
+        "updateuser": process_updateuser,
     }.get(params["TYPE"], default_func)
     await process_func(self, params)
 
-login_url = "http://play.pokemonshowdown.com/action.php"
+async def process_updateuser(self, params):
+    print(f"login as USERNAME = {params['USER']} successful")
+
 async def process_challstr(self, params):
     #send a POST request to verify credentials at showdown server
     post_body = {
@@ -40,14 +44,13 @@ async def process_challstr(self, params):
         "pass" : self.password,
         "challstr" : params["CHALLSTR"]
     }
-    res = post(login_url, post_body)
+    res = post(LOGIN_URL, post_body)
     #parse response as json
     response = json.loads(res.text[1:])
     #attempt login with verified credentials
     if response["actionsuccess"]:
         login_command = f"|/trn {self.username},0,{response['assertion']}"
         await self.connection.send(login_command)
-        print(f"login succesful. USERNAME = {self.username}")
     else:
         print("login failed. Aborting connection...")
         await self.close()
