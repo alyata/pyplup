@@ -30,7 +30,19 @@ def parse(roomid: str, message: str) -> dict:
         "formats" : formats,
         "updatesearch" : updatesearch,
         "updatechallenges" : updatechallenges,
-        "queryresponse" : queryresponse
+        "queryresponse" : queryresponse,
+        "player" : player,
+        "teamsize" : teamsize,
+        "gametype" : gametype,
+        "gen" : gen,
+        "tier" : tier,
+        "rated" : rated,
+        "rule" : rule,
+        "clearpoke" : clearpoke,
+        "poke" : poke,
+        "teampreview" : teampreview,
+        "start" : start,
+        "request" : request
     }.get(type, unrecognized)
     parsed = parse_func(tokens)
     parsed["ROOMID"] = roomid
@@ -173,4 +185,131 @@ def queryresponse(tokens: [str]) -> dict:
         "TYPE" : "queryresponse",
         "QUERYTYPE" : tokens[1],
         "JSON" : json.loads(tokens[2])
+    }
+
+"""
+Pre-battle messages
+"""
+
+#|player|PLAYER|USERNAME|AVATAR|RATING
+def player(tokens: [str]) -> dict:
+    try:
+        rating = tokens[4]
+    except IndexError:
+        rating = None
+    return {
+        "TYPE" : "player",
+        "PLAYER" : tokens[1],
+        "USERNAME" : tokens[2],
+        "AVATAR" : tokens[3],
+        "RATING" : rating
+    }
+
+#|teamsize|PLAYER|NUMBER
+def teamsize(tokens: [str]) -> dict:
+    return {
+        "TYPE" : "teamsize",
+        "PLAYER" : tokens[1],
+        "NUMBER" : tokens[2]
+    }
+
+#|gametype|GAMETYPE
+def gametype(tokens: [str]) -> dict:
+    return {
+        "TYPE" : "gametype",
+        "GAMWTYPE" : tokens[1]
+    }
+
+#|gen|GENNUM
+def gen(tokens: [str]) -> dict:
+    return {
+        "TYPE" : "gen",
+        "GENNUM" : tokens[1]
+    }
+
+#|tier|FORMATNAME
+def tier(tokens: [str]) -> dict:
+    return {
+        "TYPE" : "tier",
+        "FORMATNAME" : tokens[1]
+    }
+
+#|rated|MESSAGE
+def rated(tokens: [str]) -> dict:
+    try:
+        message = tokens[1]
+    except IndexError:
+        message = None
+    return {
+        "TYPE" : "rated",
+        "MESSAGE" : message
+    }
+
+#|rule|RULE: DESCRIPTION
+def rule(tokens: [str]) -> dict:
+    rule, description = tokens[1].split(':', 1)
+    return {
+        "TYPE" : "rule",
+        "RULE" : rule,
+        "DESCRIPTION" : description
+    }
+
+#|clearpoke
+def clearpoke(tokens: [str]) -> dict:
+    return {
+        "TYPE": "clearpoke"
+    }
+
+#|poke|PLAYER|DETAILS|ITEM
+def poke(tokens: [str]) -> dict:
+    details = parse_details(tokens[2])
+    return {
+        "TYPE" : "poke",
+        "PLAYER" : tokens[1],
+        "DETAILS" : details,
+        "ITEM" : tokens[2] if tokens[2] else None
+    }
+
+#SPECIES{, shiny}{, GENDER}{, L##}
+def parse_details(details: str) -> dict:
+    details = details.split(", ")
+    result = {
+        "SPECIES" : details[0],
+        "SHINY" : False,
+        "GENDER" : None,
+        "LEVEL" : 100 #default level
+    }
+    for detail in details[1:]:
+        if detail == "shiny":
+            result["SHINY"] = True
+        elif detail == "M" or detail == "F":
+            result["GENDER"] = detail
+        else:
+            level = detail[1:]
+            result["LEVEL"] = int(level)
+    return result
+
+#|teampreview
+def teampreview(tokens: [str]) -> dict:
+    return {
+        "TYPE": "teampreview"
+    }
+
+#|start
+def start(tokens: [str]) -> dict:
+    return {
+        "TYPE": "start"
+    }
+
+"""
+Battle messages
+"""
+def request(tokens: [str]) -> dict:
+    try:
+        request = json.loads(tokens[1])
+    except json.decoder.JSONDecodeError:
+        request = None
+    return {
+        "TYPE" : "request",
+        "REQUEST" : request
     }
