@@ -14,12 +14,20 @@ class Showdown:
 
     from ._showdown_process import process_messages
 
+    #send a message to the given room
+    async def send_message(self, roomid, message):
+        if roomid == "global":
+            response = f"|{message}"
+        else:
+            response = f"{roomid}|{message}"
+        await self.connection.send(response)
+
     # opens a connection
     async def connect(self):
         self.connection = await websockets.connect(self.url)
         self.open = True
 
-    # closes an existing connection
+    # closes the existing connection
     async def close(self):
         if self.open:
             await self.connection.close()

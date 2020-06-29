@@ -34,8 +34,12 @@ async def process(self, roomid, message):
     }.get(params["TYPE"], default_func)
     await process_func(self, params)
 
+"""
+Methods to respond to each message type
+"""
+
 async def process_updateuser(self, params):
-    print(f"login as USERNAME = {params['USER']} successful")
+    print(f"login as USERNAME ={params['USER']} successful")
 
 async def process_challstr(self, params):
     #send a POST request to verify credentials at showdown server
@@ -50,8 +54,8 @@ async def process_challstr(self, params):
     response = json.loads(res.text[1:])
     #attempt login with verified credentials
     if response["actionsuccess"]:
-        login_command = f"|/trn {self.username},0,{response['assertion']}"
-        await self.connection.send(login_command)
+        message = f"/trn {self.username},0,{response['assertion']}"
+        await self.send_message(params['ROOMID'], message)
     else:
         print("login failed. Aborting connection...")
         await self.close()
@@ -64,14 +68,15 @@ async def process_updatechallenges(self, params):
         challenger, format = challenges.popitem()
         if format == "gen8randombattle":
             print(f"accepting a random battle challenge from {challenger}")
-            command = f"|/accept {challenger}"
+            message = f"/accept {challenger}"
         else:
             print(f"declining a challenge from {challenger}")
-            command = f"|/reject {challenger}"
-        await self.connection.send(command)
+            message = f"/reject {challenger}"
+        await self.send_message(params['ROOMID'], message)
 
 async def process_request(self, params):
     if params["REQUEST"]:
-        battle_response = f"{params['ROOMID']}|/choose default"
-        print(f"sending battle response: '{battle_response}'")
-        await self.connection.send(battle_response)
+        # choose the first possible choice
+        message = "/choose default"
+        print(f"sending battle response: '{message}'")
+        await self.send_message(params['ROOMID'], message)
