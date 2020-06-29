@@ -30,6 +30,7 @@ async def process(self, roomid, message):
         "challstr": process_challstr,
         "updatechallenges": process_updatechallenges,
         "updateuser": process_updateuser,
+        "request": process_request
     }.get(params["TYPE"], default_func)
     await process_func(self, params)
 
@@ -68,3 +69,9 @@ async def process_updatechallenges(self, params):
             print(f"declining a challenge from {challenger}")
             command = f"|/reject {challenger}"
         await self.connection.send(command)
+
+async def process_request(self, params):
+    if params["REQUEST"]:
+        battle_response = f"{params['ROOMID']}|/choose default"
+        print(f"sending battle response: '{battle_response}'")
+        await self.connection.send(battle_response)
