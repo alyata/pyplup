@@ -19,8 +19,8 @@ def makeparser(format):
     return (ws[0], fname, s)
 
 if __name__ == "__main__":
-    inp = open("message_formats.txt", "r").read()
-    out = open("parser_gen.py", "w")
+    inp = open("scripts/message_formats.txt", "r").read()
+    out = open("src/parser_gen.py", "w")
     out.write('''def parse_gen(tokens: [str]) -> dict:
     parse_func = {
 ''')
@@ -40,7 +40,7 @@ def unrecognized(tokens: [str]) -> dict:
     return {
         "TYPE" : "unrecognized",
     }
-    
+
 ''')
     for func in funcs:
         out.write(func)
