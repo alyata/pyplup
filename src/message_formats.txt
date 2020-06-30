@@ -1,0 +1,36 @@
+#battle initialization
+#
+|player|PLAYER|USERNAME|AVATAR|RATING
+|teamsize|PLAYER|NUMBER
+|gametype|GAMETYPE
+|gen|GENNUM
+|tier|FORMATNAME
+|rated
+|rated|MESSAGE
+|rule|RULE: DESCRIPTION
+|clearpoke
+|poke|PLAYER|DETAILS|ITEM
+|teampreview
+|start
+#battle progress
+#
+|request|REQUEST
+|inactiveoff|MESSAGE
+|upkeep
+|turn|NUMBER
+|win|USER
+|tie
+#Major Actions
+#
+|move|POKEMON|MOVE|TARGET
+|switch|POKEMON|DETAILS|HP STATUS
+|drag|POKEMON|DETAILS|HP STATUS
+|detailschange|POKEMON|DETAILS|HP STATUS
+|-formechange|POKEMON|SPECIES|HP STATUS
+|replace|POKEMON|DETAILS|HP STATUS
+|swap|POKEMON|POSITION
+|cant|POKEMON|REASON
+|cant|POKEMON|REASON|MOVE
+|faint|POKEMON
+|-fail|POKEMON|ACTION
+|-block|POKEMON|EFFECT|MOVE|ATTACKER

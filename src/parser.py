@@ -42,7 +42,8 @@ def parse(roomid: str, message: str) -> dict:
         "poke" : poke,
         "teampreview" : teampreview,
         "start" : start,
-        "request" : request
+        "request" : request,
+        "inactive" : inactive,
     }.get(type, unrecognized)
     parsed = parse_func(tokens)
     parsed["ROOMID"] = roomid
@@ -304,6 +305,8 @@ def start(tokens: [str]) -> dict:
 """
 Battle messages
 """
+
+#|request|REQUESt
 def request(tokens: [str]) -> dict:
     try:
         request = json.loads(tokens[1])
