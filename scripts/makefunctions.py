@@ -1,5 +1,3 @@
-from sys import argv
-
 """
 Small script to generate skeleton for parser.py based on a list of showdown
 message formats
