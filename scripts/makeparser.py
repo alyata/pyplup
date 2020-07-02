@@ -7,7 +7,10 @@ def makeparser(format):
     ws = format.split('|')
     ws = ws[1:]
     #remove dashes, as python symbols can't have dashes
-    fname = f'generated_{ws[0].replace("-", "_")}'
+    fname = ws[0].replace("-", "_dash_")
+    #remove colons, as python symbols can't have colons
+    fname = fname.replace(":", "_colon_")
+    fname = f'generated_{fname}'
     #construct the function
     s = f"#{format}\n"
     s += f"def {fname}(tokens: [str]) -> dict:\n"

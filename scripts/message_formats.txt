@@ -1,5 +1,72 @@
-#battle initialization
-#
+#######################
+# Room initialization #
+#######################
+|init|ROOMTYPE
+|title|TITLE
+|users|USERLIST
+#################
+# Room messages #
+#################
+#||MESSAGE
+|html|HTML
+|uhtml|NAME|HTML
+|uhtmlchange|NAME|HTML
+|join|USER
+#|j|USER
+#|J|USER
+|leave|USER
+#|l|USER
+#|L|USER
+|name|USER|OLDID
+#|n|USER|OLDID
+#|N|USER|OLDID
+|chat|USER|MESSAGE
+#|c|USER|MESSAGE
+|notify|TITLE|MESSAGE
+#|notify|TITLE|MESSAGE|HIGHLIGHTTOKEN
+|:|TIMESTAMP
+|c:|TIMESTAMP|USER|MESSAGE
+|battle|ROOMID|USER1|USER2
+#|b|ROOMID|USER1|USER2
+###################
+# Global messages #
+###################
+|popup|MESSAGE
+|pm|SENDER|RECEIVER|MESSAGE
+|usercount|USERCOUNT
+|nametaken|USERNAME|MESSAGE
+|challstr|CHALLSTR
+|updateuser|USER|NAMED|AVATAR|SETTINGS
+|formats|FORMATSLIST
+|updatesearch|JSON
+|updatechallenges|JSON
+|queryresponse|QUERYTYPE|JSON
+#######################
+# Tournament messages #
+#######################
+#|tournament|create|FORMAT|GENERATOR|PLAYERCAP
+#|tournament|update|JSON
+#|tournament|updateEnd
+#|tournament|error|ERROR
+#|tournament|forceend
+#|tournament|join|USER
+#|tournament|leave|USER
+#|tournament|replace|OLD|NEW
+#|tournament|start|NUMPLAYERS
+#|tournament|replace|USER1|USER2
+#|tournament|disqualify|USER
+#|tournament|battlestart|USER1|USER2|ROOMID
+#|tournament|battleend|USER1|USER2|RESULT|SCORE|RECORDED|ROOMID
+#|tournament|end|JSON
+#|tournament|scouting|SETTING
+#|tournament|autostart|on|TIMEOUT
+#|tournament|autostart|off
+#|tournament|autodq|on|TIMEOUT
+#|tournament|autodq|off
+#|tournament|autodq|target|TIME
+#########################
+# Battle initialization #
+#########################
 |player|PLAYER|USERNAME|AVATAR|RATING
 |teamsize|PLAYER|NUMBER
 |gametype|GAMETYPE
@@ -12,16 +79,20 @@
 |poke|PLAYER|DETAILS|ITEM
 |teampreview
 |start
-#battle progress
-#
+###################
+# battle progress #
+###################
+#|
 |request|REQUEST
+|inactive|MESSAGE
 |inactiveoff|MESSAGE
 |upkeep
 |turn|NUMBER
 |win|USER
 |tie
-#Major Actions
-#
+#################
+# Major actions #
+#################
 |move|POKEMON|MOVE|TARGET
 |switch|POKEMON|DETAILS|HP STATUS
 |drag|POKEMON|DETAILS|HP STATUS
@@ -30,5 +101,61 @@
 |replace|POKEMON|DETAILS|HP STATUS
 |swap|POKEMON|POSITION
 |faint|POKEMON
-#-fail ACTION is optional
+#################
+# Minor actions #
+#################
+|-fail|POKEMON|ACTION
 |-block|POKEMON|EFFECT|MOVE|ATTACKER
+|-notarget|POKEMON
+|-miss|SOURCE|TARGET
+|-damage|POKEMON|HP STATUS
+|-heal|POKEMON|HP STATUS
+|-sethp|POKEMON|HP
+|-status|POKEMON|STATUS
+|-curestatus|POKEMON|STATUS
+|-cureteam|POKEMON
+|-boost|POKEMON|STAT|AMOUNT
+|-unboost|POKEMON|STAT|AMOUNT
+|-setboost|POKEMON|STAT|AMOUNT
+|-swapboost|SOURCE|TARGET|STATS
+|-invertboost|POKEMON
+|-clearboost|POKEMON
+|-clearallboost
+|-clearpositiveboost|TARGET|POKEMON|EFFECT
+|-clearnegativeboost|POKEMON
+|-copyboost|SOURCE|TARGET
+|-weather|WEATHER
+|-fieldstart|CONDITION
+|-fieldend|CONDITION
+|-sidestart|SIDE|CONDITION
+|-sideend|SIDE|CONDITION
+|-start|POKEMON|EFFECT
+|-end|POKEMON|EFFECT
+|-crit|POKEMON
+|-supereffective|POKEMON
+|-resisted|POKEMON
+|-immune|POKEMON
+|-item|POKEMON|ITEM
+#|-item|POKEMON|ITEM|[from]EFFECT
+|-enditem|POKEMON|ITEM
+|-ability|POKEMON|ABILITY|[from]EFFECT
+|-ability|POKEMON|ABILITY
+|-endability|POKEMON
+|-transform|POKEMON|SPECIES
+|-mega|POKEMON|MEGASTONE
+|-primal|POKEMON
+|-burst|POKEMON|SPECIES|ITEM
+|-zpower|POKEMON
+|-zbroken|POKEMON
+|-activate|EFFECT
+|-hint|MESSAGE
+|-center
+|-message|MESSAGE
+|-combine
+|-waiting|SOURCE|TARGET
+|-prepare|ATTACKER|MOVE|DEFENDER
+|-mustrecharge|POKEMON
+|-nothing
+|-hitcount|POKEMON|NUM
+|-singlemove|POKEMON|MOVE
+|-singleturn|POKEMON|MOVE
