@@ -1,5 +1,5 @@
 import json
-from .parser_gen import parse_def
+from .parser_def import parse_def
 
 """
 A collection of parsing functions to parse Server-to-Client messages.
