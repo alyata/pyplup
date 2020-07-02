@@ -3,7 +3,7 @@
 #######################
 |init|ROOMTYPE
 |title|TITLE
-|users|USERLIST
+|users|USERLIST:JSON
 #################
 # Room messages #
 #################
@@ -12,36 +12,28 @@
 |html|HTML
 |uhtml|NAME|HTML
 |uhtmlchange|NAME|HTML
-|join|USER
-#|j|USER
-#|J|USER
-|leave|USER
-#|l|USER
-#|L|USER
-|name|USER|OLDID
-#|n|USER|OLDID
-#|N|USER|OLDID
-|chat|USER|MESSAGE
-#|c|USER|MESSAGE
+|join/j/J|USER
+|leave/l/L|USER
+|name/n/N|USER|OLDID
+|chat/c|USER|MESSAGE
 |notify|TITLE|MESSAGE
 |notify|TITLE|MESSAGE|HIGHLIGHTTOKEN
 |:|TIMESTAMP
 |c:|TIMESTAMP|USER|MESSAGE
-|battle|ROOMID|USER1|USER2
-#|b|ROOMID|USER1|USER2
+|battle/b|ROOMID|USER1|USER2
 ###################
 # Global messages #
 ###################
 |popup|MESSAGE
 |pm|SENDER|RECEIVER|MESSAGE
-|usercount|USERCOUNT
+|usercount|USERCOUNT:INT
 |nametaken|USERNAME|MESSAGE
 |challstr|CHALLSTR
-|updateuser|USER|NAMED|AVATAR|SETTINGS
+|updateuser|USER|NAMED:INT|AVATAR:INT|SETTINGS:JSON
 |formats|FORMATSLIST
-|updatesearch|JSON
-|updatechallenges|JSON
-|queryresponse|QUERYTYPE|JSON
+|updatesearch|JSON:JSON
+|updatechallenges|JSON:JSON
+|queryresponse|QUERYTYPE|JSON:JSON
 #######################
 # Tournament messages #
 #######################
@@ -69,7 +61,6 @@
 # Battle initialization #
 #########################
 |player|PLAYER|USERNAME|AVATAR|RATING
-|player|PLAYER|USERNAME|AVATAR
 |teamsize|PLAYER|NUMBER
 |gametype|GAMETYPE
 |gen|GENNUM

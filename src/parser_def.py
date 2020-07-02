@@ -1,4 +1,5 @@
 import os
+import json
 
 """
 Default parsing function, attempts to match the input to formats given
@@ -33,12 +34,16 @@ def parse_def(tokens: [str]) -> dict:
     return unrecognized(tokens)
 
 def pattern_match(format_tokens: [str], tokens: [str]) -> bool:
-    correct_type = format_tokens[0] == tokens[0]
+    #split into a list of type aliases
+    types = format_tokens[0].split('/')
+    correct_type = tokens[0] in types
     correct_length = len(format_tokens) + TAG_SIZE >= len(tokens)
     return correct_type and correct_length
 
 def build_dict(format_tokens: [str], tokens: [str]) -> dict:
-    output = {"TYPE" : format_tokens[0]}
+    # Use the first type alias as the primary type name
+    types = format_tokens[0].split('/')
+    output = {"TYPE" : types[0]}
     # Remove the type label
     format_tokens = format_tokens[1:]
     tokens = tokens[1:]
@@ -46,8 +51,18 @@ def build_dict(format_tokens: [str], tokens: [str]) -> dict:
     format_tokens += [f"TAG {n + 1}" for n in range(TAG_SIZE)]
     # Assign the param values
     for format_token, token in zip(format_tokens, tokens):
-        output[format_token] = token
+        # Check for datatype annotation of param
+        subtokens = format_token.split(':')
+        if len(subtokens) > 1:
+            token = convert_datatype(token, subtokens[1])
+        output[subtokens[0]] = token
     return output
+
+def convert_datatype(data: str, type: str):
+    return {
+        "INT" : lambda d: int(d),
+        "JSON" : lambda d: json.loads(d),
+    }.get(type, id)(data)
 
 def unrecognized(tokens: [str]) -> dict:
     return {

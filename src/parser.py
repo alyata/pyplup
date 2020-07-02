@@ -13,22 +13,8 @@ def parse(roomid: str, message: str) -> dict:
     tokens = tokens[1:]
     type = tokens[0]
     parse_func = {
-        "users" : users,
-        "join" : join,
-        "j" : join,
-        "J" : join,
-        "leave" : leave,
-        "l" : leave,
-        "L" : leave,
-        "battle" : battle,
-        "b" : battle,
-        "usercount" : usercount,
         "challstr" : challstr,
-        "updateuser" : updateuser,
         "formats" : formats,
-        "updatesearch" : updatesearch,
-        "updatechallenges" : updatechallenges,
-        "queryresponse" : queryresponse,
         "rule" : rule,
         "poke" : poke,
         "request" : request,
@@ -38,52 +24,8 @@ def parse(roomid: str, message: str) -> dict:
     return parsed
 
 """
-Room initialization
-"""
-
-#|users|USERLIST
-def users(tokens: [str]) -> dict:
-    return {
-        "TYPE" : "users",
-        "TITLE" : json.loads(tokens[1])
-    }
-
-"""
-Room messages
-"""
-#|join|USER or |j|USER or |J|USER
-def join(tokens: [str]) -> dict:
-    return {
-        "TYPE" : "join",
-        "USER" : tokens[1]
-    }
-
-#|leave|USER or |l|USER or |L|USER
-def leave(tokens: [str]) -> dict:
-    return {
-        "TYPE" : "leave",
-        "USER" : tokens[1]
-    }
-
-#|battle|ROOMID|USER1|USER2 or |b|ROOMID|USER1|USER2
-def battle(tokens: [str]) -> dict:
-    return {
-        "TYPE" : "battle",
-        "ROOMID" : tokens[1],
-        "USER1" : tokens[2],
-        "USER2" : tokens[3]
-    }
-
-"""
 Global messages
 """
-
-#|usercount|USERCOUNT
-def usercount(tokens: [str]) -> dict:
-    return {
-        "TYPE" : "usercount",
-        "USERCOUNT" : int(tokens[1])
-    }
 
 #|challstr|CHALLSTR
 def challstr(tokens: [str]) -> dict:
@@ -96,16 +38,6 @@ def challstr(tokens: [str]) -> dict:
     return {
         "TYPE" : "challstr",
         "CHALLSTR" : challstr
-    }
-
-#|updateuser|USER|NAMED|AVATAR|SETTINGS
-def updateuser(tokens: [str]) -> dict:
-    return {
-        "TYPE"     : "updateuser",
-        "USER"     : tokens[1],
-        "NAMED"    : int(tokens[2]),
-        "AVATAR"   : int(tokens[3]),
-        "SETTINGS" : json.loads(tokens[4])
     }
 
 #|formats|FORMATSLIST
@@ -125,28 +57,6 @@ def formats(tokens: [str]) -> dict:
     return {
         "TYPE" : "formats",
         "FORMATSLIST" : format_sections
-    }
-
-#|updatesearch|JSON
-def updatesearch(tokens: [str]) -> dict:
-    return {
-        "TYPE" : "updatesearch",
-        "JSON" : json.loads(tokens[1])
-    }
-
-#|updatechallenges|JSON
-def updatechallenges(tokens: [str]) -> dict:
-    return {
-        "TYPE" : "updatechallenges",
-        "JSON" : json.loads(tokens[1])
-    }
-
-#|queryresponse|QUERYTYPE|JSON
-def queryresponse(tokens: [str]) -> dict:
-    return {
-        "TYPE" : "queryresponse",
-        "QUERYTYPE" : tokens[1],
-        "JSON" : json.loads(tokens[2])
     }
 
 """
