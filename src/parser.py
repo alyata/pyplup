@@ -1,5 +1,5 @@
 import json
-from .parser_gen import parse_gen
+from .parser_gen import parse_def
 
 """
 A collection of parsing functions to parse Server-to-Client messages.
@@ -44,7 +44,7 @@ def parse(roomid: str, message: str) -> dict:
         "teampreview" : teampreview,
         "start" : start,
         "request" : request,
-    }.get(type, parse_gen)
+    }.get(type, parse_def)
     parsed = parse_func(tokens)
     parsed["ROOMID"] = roomid
     return parsed

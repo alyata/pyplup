@@ -23,7 +23,7 @@
 |chat|USER|MESSAGE
 #|c|USER|MESSAGE
 |notify|TITLE|MESSAGE
-#|notify|TITLE|MESSAGE|HIGHLIGHTTOKEN
+|notify|TITLE|MESSAGE|HIGHLIGHTTOKEN
 |:|TIMESTAMP
 |c:|TIMESTAMP|USER|MESSAGE
 |battle|ROOMID|USER1|USER2
@@ -82,7 +82,7 @@
 ###################
 # battle progress #
 ###################
-#|
+|
 |request|REQUEST
 |inactive|MESSAGE
 |inactiveoff|MESSAGE
@@ -136,10 +136,10 @@
 |-resisted|POKEMON
 |-immune|POKEMON
 |-item|POKEMON|ITEM
-#|-item|POKEMON|ITEM|[from]EFFECT
+|-item|POKEMON|ITEM|[from]EFFECT
 |-enditem|POKEMON|ITEM
-|-ability|POKEMON|ABILITY|[from]EFFECT
 |-ability|POKEMON|ABILITY
+|-ability|POKEMON|ABILITY|[from]EFFECT
 |-endability|POKEMON
 |-transform|POKEMON|SPECIES
 |-mega|POKEMON|MEGASTONE
