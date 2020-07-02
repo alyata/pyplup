@@ -7,6 +7,7 @@
 #################
 # Room messages #
 #################
+|error|MESSAGE
 #||MESSAGE
 |html|HTML
 |uhtml|NAME|HTML
@@ -60,14 +61,15 @@
 #|tournament|end|JSON
 #|tournament|scouting|SETTING
 #|tournament|autostart|on|TIMEOUT
-#|tournament|autostart|off
+#|tournament|autostartf
 #|tournament|autodq|on|TIMEOUT
-#|tournament|autodq|off
+#|tournament|autodqf
 #|tournament|autodq|target|TIME
 #########################
 # Battle initialization #
 #########################
 |player|PLAYER|USERNAME|AVATAR|RATING
+|player|PLAYER|USERNAME|AVATAR
 |teamsize|PLAYER|NUMBER
 |gametype|GAMETYPE
 |gen|GENNUM
@@ -100,6 +102,7 @@
 |-formechange|POKEMON|SPECIES|HP STATUS
 |replace|POKEMON|DETAILS|HP STATUS
 |swap|POKEMON|POSITION
+|cant|POKEMON|REASON|MOVE
 |faint|POKEMON
 #################
 # Minor actions #
@@ -136,10 +139,8 @@
 |-resisted|POKEMON
 |-immune|POKEMON
 |-item|POKEMON|ITEM
-|-item|POKEMON|ITEM|[from]EFFECT
 |-enditem|POKEMON|ITEM
 |-ability|POKEMON|ABILITY
-|-ability|POKEMON|ABILITY|[from]EFFECT
 |-endability|POKEMON
 |-transform|POKEMON|SPECIES
 |-mega|POKEMON|MEGASTONE

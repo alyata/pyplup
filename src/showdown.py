@@ -6,7 +6,6 @@ class Showdown:
         self.url = WEBSOCKET_URL
         self.username = username
         self.password = password
-        self.open = False
 
     async def run(self):
         async for messages in self.connection:
@@ -25,10 +24,8 @@ class Showdown:
     # opens a connection
     async def connect(self):
         self.connection = await websockets.connect(self.url)
-        self.open = True
 
     # closes the existing connection
     async def close(self):
         if self.open:
             await self.connection.close()
-            self.open = False

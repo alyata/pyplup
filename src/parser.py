@@ -13,8 +13,6 @@ def parse(roomid: str, message: str) -> dict:
     tokens = tokens[1:]
     type = tokens[0]
     parse_func = {
-        "init" : init,
-        "title" : title,
         "users" : users,
         "join" : join,
         "j" : join,
@@ -25,24 +23,14 @@ def parse(roomid: str, message: str) -> dict:
         "battle" : battle,
         "b" : battle,
         "usercount" : usercount,
-        "nametaken" : nametaken,
         "challstr" : challstr,
         "updateuser" : updateuser,
         "formats" : formats,
         "updatesearch" : updatesearch,
         "updatechallenges" : updatechallenges,
         "queryresponse" : queryresponse,
-        "player" : player,
-        "teamsize" : teamsize,
-        "gametype" : gametype,
-        "gen" : gen,
-        "tier" : tier,
-        "rated" : rated,
         "rule" : rule,
-        "clearpoke" : clearpoke,
         "poke" : poke,
-        "teampreview" : teampreview,
-        "start" : start,
         "request" : request,
     }.get(type, parse_def)
     parsed = parse_func(tokens)
@@ -52,20 +40,6 @@ def parse(roomid: str, message: str) -> dict:
 """
 Room initialization
 """
-
-#|init|ROOMTYPE
-def init(tokens: [str]) -> dict:
-    return {
-        "TYPE" : "init",
-        "ROOMTYPE" : tokens[1]
-    }
-
-#|title|TITLE
-def title(tokens: [str]) -> dict:
-    return {
-        "TYPE" : "title",
-        "TITLE" : tokens[1]
-    }
 
 #|users|USERLIST
 def users(tokens: [str]) -> dict:
@@ -109,14 +83,6 @@ def usercount(tokens: [str]) -> dict:
     return {
         "TYPE" : "usercount",
         "USERCOUNT" : int(tokens[1])
-    }
-
-#|nametaken|USERNAME|MESSAGE
-def nametaken(tokens: [str]) -> dict:
-    return {
-        "TYPE" : "nametaken",
-        "USERNAME" : tokens[1],
-        "MESSAGE" : tokens[2]
     }
 
 #|challstr|CHALLSTR
@@ -187,60 +153,6 @@ def queryresponse(tokens: [str]) -> dict:
 Pre-battle messages
 """
 
-#|player|PLAYER|USERNAME|AVATAR|RATING
-def player(tokens: [str]) -> dict:
-    try:
-        rating = tokens[4]
-    except IndexError:
-        rating = None
-    return {
-        "TYPE" : "player",
-        "PLAYER" : tokens[1],
-        "USERNAME" : tokens[2],
-        "AVATAR" : tokens[3],
-        "RATING" : rating
-    }
-
-#|teamsize|PLAYER|NUMBER
-def teamsize(tokens: [str]) -> dict:
-    return {
-        "TYPE" : "teamsize",
-        "PLAYER" : tokens[1],
-        "NUMBER" : tokens[2]
-    }
-
-#|gametype|GAMETYPE
-def gametype(tokens: [str]) -> dict:
-    return {
-        "TYPE" : "gametype",
-        "GAMWTYPE" : tokens[1]
-    }
-
-#|gen|GENNUM
-def gen(tokens: [str]) -> dict:
-    return {
-        "TYPE" : "gen",
-        "GENNUM" : tokens[1]
-    }
-
-#|tier|FORMATNAME
-def tier(tokens: [str]) -> dict:
-    return {
-        "TYPE" : "tier",
-        "FORMATNAME" : tokens[1]
-    }
-
-#|rated|MESSAGE
-def rated(tokens: [str]) -> dict:
-    try:
-        message = tokens[1]
-    except IndexError:
-        message = None
-    return {
-        "TYPE" : "rated",
-        "MESSAGE" : message
-    }
-
 #|rule|RULE: DESCRIPTION
 def rule(tokens: [str]) -> dict:
     rule, description = tokens[1].split(':', 1)
@@ -250,21 +162,11 @@ def rule(tokens: [str]) -> dict:
         "DESCRIPTION" : description
     }
 
-#|clearpoke
-def clearpoke(tokens: [str]) -> dict:
-    return {
-        "TYPE": "clearpoke"
-    }
-
 #|poke|PLAYER|DETAILS|ITEM
 def poke(tokens: [str]) -> dict:
-    details = parse_details(tokens[2])
-    return {
-        "TYPE" : "poke",
-        "PLAYER" : tokens[1],
-        "DETAILS" : details,
-        "ITEM" : tokens[2] if tokens[2] else None
-    }
+    output = parse_def(tokens)
+    output["DETAILS"] = parse_details(output["DETAILS"])
+    return output
 
 #SPECIES{, shiny}{, GENDER}{, L##}
 def parse_details(details: str) -> dict:
@@ -284,18 +186,6 @@ def parse_details(details: str) -> dict:
             level = detail[1:]
             result["LEVEL"] = int(level)
     return result
-
-#|teampreview
-def teampreview(tokens: [str]) -> dict:
-    return {
-        "TYPE": "teampreview"
-    }
-
-#|start
-def start(tokens: [str]) -> dict:
-    return {
-        "TYPE": "start"
-    }
 
 """
 Battle messages
