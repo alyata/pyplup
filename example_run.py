@@ -1,6 +1,5 @@
 from src.showdown import Showdown
 import asyncio
-import time
 
 import example_config as config
 
