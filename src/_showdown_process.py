@@ -3,6 +3,7 @@ from requests import post
 import asyncio
 from .parser import parse
 from .constants import LOGIN_URL
+from .battle import Battle
 
 """
 methods to process incoming messages and respond to them.
@@ -30,7 +31,10 @@ async def process(self, roomid, message):
         "challstr": process_challstr,
         "updatechallenges": process_updatechallenges,
         "updateuser": process_updateuser,
-        "request": process_request
+        "request": process_request,
+        "init": process_init,
+        "title": process_title,
+        "player": process_player
     }.get(params["TYPE"], default_func)
     await process_func(self, params)
 
@@ -76,7 +80,30 @@ async def process_updatechallenges(self, params):
 
 async def process_request(self, params):
     if params["REQUEST"]:
+        # update the state of the battle given the new info
+        battle = self.battles[params["ROOMID"]]
+        # get the number of the player being referenced
+        player_num = int(params["REQUEST"]["side"]["id"][1])
+        username = params["REQUEST"]["side"]["name"]
+        pokemon_list = params["REQUEST"]["side"]["pokemon"]
+        battle.set_party(player_num, username, pokemon_list)
+
         # choose the first possible choice
         message = "/choose default"
         print(f"sending battle response: '{message}'")
         await self.send_message(params['ROOMID'], message)
+
+async def process_init(self, params):
+    if params["ROOMTYPE"] == "battle":
+        self.battles[params["ROOMID"]] = Battle(self, params["ROOMID"])
+
+async def process_title(self, params):
+    battle = self.battles.get(params["ROOMID"])
+    if battle:
+        battle.set_title(params["TITLE"])
+
+async def process_player(self, params):
+    if params["USERNAME"] != self.username:
+        battle = self.battles.get(params["ROOMID"])
+        player_num = int(params["PLAYER"][1])
+        battle.set_player(player_num, params["USERNAME"])

@@ -6,6 +6,7 @@ class Showdown:
         self.url = WEBSOCKET_URL
         self.username = username
         self.password = password
+        self.battles = {}
 
     async def run(self):
         async for messages in self.connection:
