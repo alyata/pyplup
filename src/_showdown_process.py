@@ -1,9 +1,9 @@
 import json
 from requests import post
 import asyncio
-from .parser import parse
+from .parser import parse, parse_details
 from .constants import LOGIN_URL
-from .battle import Battle
+from .battle import Battle, Pokemon
 
 """
 methods to process incoming messages and respond to them.
@@ -82,11 +82,26 @@ async def process_request(self, params):
     if params["REQUEST"]:
         # update the state of the battle given the new info
         battle = self.battles[params["ROOMID"]]
-        # get the number of the player being referenced
-        player_num = int(params["REQUEST"]["side"]["id"][1])
-        username = params["REQUEST"]["side"]["name"]
-        pokemon_list = params["REQUEST"]["side"]["pokemon"]
-        battle.set_party(player_num, username, pokemon_list)
+        if battle:
+            # get the number of the player being referenced
+            player_num = int(params["REQUEST"]["side"]["id"][1])
+            username = params["REQUEST"]["side"]["name"]
+            pokemon_list = params["REQUEST"]["side"]["pokemon"]
+            for pokemon_data in pokemon_list:
+                position, nickname = pokemon_data["ident"].split(": ", 1)
+                details = parse_details(pokemon_data["details"])
+                pokemon = Pokemon(
+                    details["SPECIES"],
+                    nickname,
+                    details["GENDER"],
+                    details["LEVEL"],
+                    details["SHINY"])
+                pokemon.set_atk(pokemon_data["stats"]["atk"])
+                pokemon.set_def(pokemon_data["stats"]["def"])
+                pokemon.set_spa(pokemon_data["stats"]["spa"])
+                pokemon.set_spd(pokemon_data["stats"]["spd"])
+                pokemon.set_spe(pokemon_data["stats"]["spe"])
+                pokemon.set_moves(pokemon_data["moves"])
 
         # choose the first possible choice
         message = "/choose default"
@@ -103,7 +118,7 @@ async def process_title(self, params):
         battle.set_title(params["TITLE"])
 
 async def process_player(self, params):
-    if params["USERNAME"] != self.username:
-        battle = self.battles.get(params["ROOMID"])
+    battle = self.battles.get(params["ROOMID"])
+    if battle:
         player_num = int(params["PLAYER"][1])
-        battle.set_player(player_num, params["USERNAME"])
+        battle.new_player(player_num, params["USERNAME"])
